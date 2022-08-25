@@ -37,15 +37,16 @@ function onInputSearch(e) {
           );
           return;
         } else if (countriesArray.length < 10 && countriesArray.length >= 2) {
-          countryListEl.insertAdjacentHTML(
+          refs.countryListEl.insertAdjacentHTML(
             'beforeend',
             oneCountry(countriesArray)
           );
         } else {
-          countryInfoEl.insertAdjacentHTML(
+          refs.countryInfoEl.insertAdjacentHTML(
             'beforeend',
             countryMarkup(countriesArray)
           );
+          console.log(refs.countryInfoEl);
         }
       })
       .catch(err => {
@@ -54,4 +55,3 @@ function onInputSearch(e) {
       });
   }
 }
-//
