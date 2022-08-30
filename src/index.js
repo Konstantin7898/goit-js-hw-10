@@ -24,37 +24,34 @@ function onInputSearch(e) {
   refs.countryInfoEl.innerHTML = '';
 
   newsApiService.query = e.target.value.trim();
-  console.log(newsApiService.query);
+  //   console.log(newsApiService.query);
 
-  if (newsApiService.query.length) {
-    newsApiService
-      .fetchArticles()
-      .then(countriesArray => {
-        console.log(countriesArray);
-        if (countriesArray.length > 10) {
-          Notiflix.Notify.info(
-            'Too many matches found. Please enter a more specific name'
-          );
-          return;
-        } else if (countriesArray.length < 10 && countriesArray.length >= 2) {
-          refs.countryListEl.insertAdjacentHTML(
-            'beforeend',
-            oneCountry(countriesArray)
-          );
-          refs.countryListEl.innerHTML = '';
-        } else {
-          refs.countryInfoEl.insertAdjacentHTML(
-            'beforeend',
-            countryMarkup(countriesArray)
-          );
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        Notiflix.Notify.failure('Oops, there is no country with that name');
-        return [];
-      });
-  }
+  if (!newsApiService.query.length) return;
+
+  newsApiService
+    .fetchArticles()
+    .then(countriesArray => {
+      //   console.log('length ===> ', countriesArray.length);
+
+      if (countriesArray.length > 10) {
+        Notiflix.Notify.info(
+          'Too many matches found. Please enter a more specific name'
+        );
+      } else if (countriesArray.length >= 2 && countriesArray.length <= 10) {
+        refs.countryListEl.insertAdjacentHTML(
+          'beforeend',
+          oneCountry(countriesArray)
+        );
+      } else {
+        refs.countryInfoEl.insertAdjacentHTML(
+          'beforeend',
+          countryMarkup(countriesArray)
+        );
+      }
+    })
+    .catch(err => {
+      Notiflix.Notify.failure('Oops, there is no country with that name');
+    });
 }
 function countryMarkup(countries) {
   return countries
@@ -64,9 +61,13 @@ function countryMarkup(countries) {
         element.name.common
       } flag' />
         <p class="country-name">${element.name.official}</p></div>
-        <p class="additional-info"><b>Capital:</b> ${element.capital}</p>
-        <p class="additional-info"><b>Population:</b> ${element.population}</p>
-        <p class="additional-info"><b>Languages:</b> ${Object.values(
+        <p class="additional-info"><span class= "country">Capital:</span> ${
+          element.capital
+        }</p>
+        <p class="additional-info"><span class= "country">Population:</span> ${
+          element.population
+        }</p>
+        <p class="additional-info"><span class= "country">Languages:</span> ${Object.values(
           element.languages
         )}</p>`;
     })
